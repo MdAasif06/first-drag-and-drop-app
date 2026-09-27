@@ -3,7 +3,7 @@ import { useState } from "react";
 import { DndContext, DragOverlay } from "@dnd-kit/core";
 import KanbanColumn from "./KanbanColumn";
 import TaskCard from "./TaskCard";
-
+import TaskForm from "./TaskForm";
 const initialTasks = [
   {
     id: 1,
@@ -50,6 +50,18 @@ export default function KanbanBoard() {
       });
     });
   };
+
+  const handleAddTask=(title)=>{
+    const newTask={
+      id:Date.now(),
+      title:title,
+      status:"todo"
+    }
+    setTasks((currentTasks)=>{
+      return [...currentTasks,newTask]
+    })
+  }
+
   const todoTasks = tasks.filter((task) => task.status === "todo");
 
   const inProgressTasks = tasks.filter((task) => task.status === "in-progress");
@@ -57,6 +69,8 @@ export default function KanbanBoard() {
   const doneTasks = tasks.filter((task) => task.status === "done");
 
   return (
+    <>
+    <TaskForm onAddTask={handleAddTask}/>
     <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
       <div className="grid gap-6 md:grid-cols-3">
         <KanbanColumn id="todo" title="Todo" tasks={todoTasks} />
@@ -71,5 +85,6 @@ export default function KanbanBoard() {
         {activeTasks ? <TaskCard task={activeTasks} /> : null}
       </DragOverlay>
     </DndContext>
+    </>
   );
 }

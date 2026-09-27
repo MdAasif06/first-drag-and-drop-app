@@ -11,7 +11,7 @@ export default function KanbanColumn({ id, title, tasks }) {
       className={`min-h-80 rounded-xl p-5 shadow ${isOver ? "bg-blue-100" : "bg-white"}`}
     >
         <h2 className="mb-4 text-xl font-bold">{title}</h2>
-        <div>
+        <div className="space-y-3">
             {tasks.map((task)=>(
                 <TakeCard key={task.id} task={task}/>
             ))}
