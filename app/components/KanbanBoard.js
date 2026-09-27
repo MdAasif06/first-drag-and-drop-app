@@ -38,11 +38,11 @@ export default function KanbanBoard() {
   const handleDragEnd = (e) => {
     const { active, over } = e;
     setActiveTasks(null);
-    if (over) {
+    if (!over) {
       return;
     }
     setTasks((currentTasks) => {
-      currentTasks.map((task) => {
+     return currentTasks.map((task) => {
         if (task.id === active.id) {
           return { ...task, status: over.id };
         }
@@ -61,8 +61,8 @@ export default function KanbanBoard() {
       <div className="grid gap-6 md:grid-cols-3">
         <KanbanColumn id="todo" title="Todo" tasks={todoTasks} />
         <KanbanColumn
-          id="progress"
-          title="In progress"
+          id="in-progress"
+          title="in-progress"
           tasks={inProgressTasks}
         />
         <KanbanColumn id={"done"} title={"Done"} tasks={doneTasks} />
