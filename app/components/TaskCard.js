@@ -1,7 +1,7 @@
 "use client";
 import { useDraggable } from "@dnd-kit/core";
 
-export default function TakeCard({ task }) {
+export default function TakeCard({ task, onEdit, onDelete }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({ id: task.id });
 
@@ -13,11 +13,38 @@ export default function TakeCard({ task }) {
     <div
       ref={setNodeRef}
       style={style}
-      {...listeners}
-      {...attributes}
       className={`cursor-grab rounded-lg bg-gray-100 shadow-sm ${isDragging ? "opacity-40" : ""}`}
     >
-      {task.title}
+      <div>
+        <p className="mb-3">{task.title}</p>
+        <span
+          {...listeners}
+          {...attributes}
+          className="cursor-grab px-2 text-gray-500"
+        >
+          {/* ⋮⋮ */}
+        </span>
+      </div>
+      <div className="flex gap-2">
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete(task.id);
+          }}
+          className="rounded bg-red-500 px-3 py-1 text-sm text-white"
+        >
+          delete
+        </button>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onEdit(task);
+          }}
+          className="rounded bg-blue-500 px-3 py-1 text-sm text-white"
+        >
+          Edit
+        </button>
+      </div>
     </div>
   );
 }

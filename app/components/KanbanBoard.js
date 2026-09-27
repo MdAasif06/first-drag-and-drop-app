@@ -42,7 +42,7 @@ export default function KanbanBoard() {
       return;
     }
     setTasks((currentTasks) => {
-     return currentTasks.map((task) => {
+      return currentTasks.map((task) => {
         if (task.id === active.id) {
           return { ...task, status: over.id };
         }
@@ -51,40 +51,80 @@ export default function KanbanBoard() {
     });
   };
 
-  const handleAddTask=(title)=>{
-    const newTask={
-      id:Date.now(),
-      title:title,
-      status:"todo"
-    }
-    setTasks((currentTasks)=>{
-      return [...currentTasks,newTask]
-    })
-  }
+  const handleAddTask = (title) => {
+    const newTask = {
+      id: Date.now(),
+      title: title,
+      status: "todo",
+    };
+    setTasks((currentTasks) => {
+      return [...currentTasks, newTask];
+    });
+  };
 
   const todoTasks = tasks.filter((task) => task.status === "todo");
 
   const inProgressTasks = tasks.filter((task) => task.status === "in-progress");
 
   const doneTasks = tasks.filter((task) => task.status === "done");
+  
+  const handleDeleteTask = (id) => {
+    setTasks((currentTasks) => {
+      return currentTasks.filter((task) => task.id !== id);
+    });
+  };
+  const handleEditTask = (task) => {
+    const newTitle = window.prompt("Edit task", task.title);
+    if (!newTitle || !newTitle.trim()) {
+      return;
+    }
+    setTasks((currentTasks) => {
+      return currentTasks.map((currentTask) => {
+        if (currentTask.id === task.id) {
+          return { ...currentTask, title: newTitle.trim() };
+        }
+        return currentTask;
+      });
+    });
+  };
 
   return (
     <>
-    <TaskForm onAddTask={handleAddTask}/>
-    <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-      <div className="grid gap-6 md:grid-cols-3">
-        <KanbanColumn id="todo" title="Todo" tasks={todoTasks} />
-        <KanbanColumn
-          id="in-progress"
-          title="in-progress"
-          tasks={inProgressTasks}
-        />
-        <KanbanColumn id={"done"} title={"Done"} tasks={doneTasks} />
-      </div>
-      <DragOverlay>
-        {activeTasks ? <TaskCard task={activeTasks} /> : null}
-      </DragOverlay>
-    </DndContext>
+      <TaskForm onAddTask={handleAddTask} />
+      <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+        <div className="grid gap-6 md:grid-cols-3">
+          <KanbanColumn
+            id="todo"
+            title="Todo"
+            tasks={todoTasks}
+            onDelete={handleDeleteTask}
+            onEdit={handleEditTask}
+          />
+          <KanbanColumn
+            id="in-progress"
+            title="in-progress"
+            tasks={inProgressTasks}
+            onDelete={handleDeleteTask}
+            onEdit={handleEditTask}
+          />
+          <KanbanColumn
+            id={"done"}
+            title={"Done"}
+            tasks={doneTasks}
+            onDelete={handleDeleteTask}
+            onEdit={handleEditTask}
+          />
+        </div>
+        <DragOverlay>
+          {activeTasks ? (
+            <TaskCard
+              task={activeTasks}
+              onDelete={handleDeleteTask}
+              onEdit={handleEditTask}
+            />
+          ) : null}
+        </DragOverlay>
+      </DndContext>
     </>
   );
 }
