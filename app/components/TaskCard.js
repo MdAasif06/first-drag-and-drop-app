@@ -1,5 +1,6 @@
 "use client";
 import { useDraggable } from "@dnd-kit/core";
+import { GripVertical } from "lucide-react";
 
 export default function TakeCard({ task, onEdit, onDelete }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
@@ -22,7 +23,8 @@ export default function TakeCard({ task, onEdit, onDelete }) {
           {...attributes}
           className="cursor-grab px-2 text-gray-500"
         >
-          ⋮⋮
+          {/* ⋮⋮ */}
+          <GripVertical size={20} />
         </button>
       </div>
       <div className="mt-3 flex gap-2">
