@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState,useEffect,useRef } from "react";
 import { DndContext, DragOverlay } from "@dnd-kit/core";
 import KanbanColumn from "./KanbanColumn";
 import TaskCard from "./TaskCard";
@@ -30,6 +30,7 @@ const initialTasks = [
 export default function KanbanBoard() {
   const [tasks, setTasks] = useState(initialTasks);
   const [activeTasks, setActiveTasks] = useState(null);
+  const isFirstRender = useRef(true);
 
   const handleDragStart = (e) => {
     const task = tasks.find((task) => task.id === e.active.id);
@@ -87,11 +88,24 @@ export default function KanbanBoard() {
       });
     });
   };
+  useEffect(()=>{
+    const savedTasks=localStorage.getItem("task-asif")
+    if(savedTasks){
+      setTasks(JSON.parse(savedTasks))
+    }
+  },[])
+  useEffect(()=>{
+    if(isFirstRender.current){
+      isFirstRender.current=false
+      return
+    }
+    localStorage.setItem("task-asif",JSON.stringify(tasks))
+  },[tasks])
 
   return (
     <>
       <TaskForm onAddTask={handleAddTask} />
-      <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+      <DndContext id="kanban-dnd" onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
         <div className="grid gap-6 md:grid-cols-3">
           <KanbanColumn
             id="todo"

@@ -15,17 +15,17 @@ export default function TakeCard({ task, onEdit, onDelete }) {
       style={style}
       className={`cursor-grab rounded-lg bg-gray-100 shadow-sm ${isDragging ? "opacity-40" : ""}`}
     >
-      <div>
+      <div className="flex items-center justify-between">
         <p className="mb-3">{task.title}</p>
-        <span
+        <button
           {...listeners}
           {...attributes}
           className="cursor-grab px-2 text-gray-500"
         >
-          {/* ⋮⋮ */}
-        </span>
+          ⋮⋮
+        </button>
       </div>
-      <div className="flex gap-2">
+      <div className="mt-3 flex gap-2">
         <button
           onClick={(e) => {
             e.stopPropagation();
